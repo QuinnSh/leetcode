@@ -1,0 +1,18 @@
+class Solution(object):  
+    def generateParenthesis(self, n):  
+        """ 
+        :type n: int 
+        :rtype: List[str] 
+        """  
+        if n<1: return []  
+        braces=set()  
+        braces.add('()')  
+        for i in xrange(n-1):  
+            nextbraces=set()  
+            for brace in braces:  
+                for ind in xrange(1,len(brace)+1):  
+                    for ind2 in xrange(ind, len(brace)+1):  
+                        newbs = brace[:ind]+'('+brace[ind:ind2]+')'+brace[ind2:]  
+                        nextbraces.add(newbs)  
+            braces=nextbraces  
+        return list(braces)

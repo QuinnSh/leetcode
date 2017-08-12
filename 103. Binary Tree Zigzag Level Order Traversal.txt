@@ -1,0 +1,41 @@
+public class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> res=new ArrayList<>();
+             
+         TreeNode node=root;
+         Stack<TreeNode> stack =new Stack<>();
+         if(node!=null)
+             stack.push(node);
+         int leftOrRight=0;     //0为先遍历左子树，1为右子树
+         while(!stack.isEmpty()){
+             Stack<TreeNode> nextStack =new Stack<>();
+             List<Integer> list=new ArrayList<>();
+             while(!stack.isEmpty()){
+                 TreeNode temp=stack.pop();
+                 list.add(temp.val);
+                 if(leftOrRight==0){
+                     if(temp.left!=null)
+                         nextStack.push(temp.left);
+                     if(temp.right!=null)
+                         nextStack.push(temp.right);
+                 }else{
+                     if(temp.right!=null)
+                         nextStack.push(temp.right);
+                     if(temp.left!=null)
+                         nextStack.push(temp.left);
+                 }
+             }
+             if(leftOrRight==0)
+                 leftOrRight=1;
+             else {
+                leftOrRight=0;
+            }
+             res.add(new ArrayList<>(list));
+             //System.out.println(list);
+             list.clear();
+             stack=(Stack<TreeNode>) nextStack.clone ();;
+             nextStack.clear();
+         }
+         return res;
+    }
+}

@@ -1,0 +1,65 @@
+public class Solution {
+         public int[] findOrder(int numCourses, int[][] prerequisites) {
+            int[] res = new int[numCourses];
+            int[] preNums = new int[numCourses];//preNums[j] store the num which before course j have to taken
+            //create numCourse sets which every one store the course set which must taken after course j
+            ArrayList<HashSet<Integer>> sets = new ArrayList<HashSet<Integer>>();
+            //post store the course j which have to before course j
+            HashMap<Integer, HashSet<Integer>> post = new HashMap<Integer, HashSet<Integer>>();
+
+            for(int i = 0;i<numCourses;i++){
+                sets.add(new HashSet<Integer>());
+            }
+
+            int preLen = prerequisites.length;
+
+            //init sets
+            for(int i = 0;i<preLen;i++){
+                if(prerequisites[i].length!=2)
+                    return res;
+                int key = prerequisites[i][0];
+                int value = prerequisites[i][1];
+
+                sets.get(value).add(key);
+                if(post.containsKey(key))
+                    post.get(key).add(value);
+                else {
+                    HashSet<Integer> tmpset = new HashSet<Integer>();
+                    tmpset.add(value);
+                    post.put(key, tmpset);
+                }
+            }
+
+            //init preNums
+            for(int i = 0;i<numCourses;i++){
+
+                if(post.containsKey(i))
+                    preNums[i] = post.get(i).size();
+                else
+                    preNums[i] = 0;
+            }
+
+            int index = 0;
+            int i;
+            while(index < numCourses){
+                //if course j has no pre course,then select it
+                //if no such course,which will be a circle
+                for(i = 0;i<numCourses;i++)
+                    if(preNums[i]==0){
+                        preNums[i] = -1;
+                        break;
+                    }
+                if(i == numCourses)
+                    return new int[0];
+
+                res[index++] = i;
+
+                //select the list which relay on the course j
+                HashSet<Integer> tmpSet = sets.get(i);
+                Iterator<Integer> iterator = tmpSet.iterator();
+                while(iterator.hasNext())
+                    preNums[iterator.next()]--;
+            }
+            return res;
+      }
+}

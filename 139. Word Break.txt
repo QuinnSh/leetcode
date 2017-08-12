@@ -1,0 +1,16 @@
+class Solution(object):
+    def wordBreak(self, s, wordDict):
+        """
+        :type s: str
+        :type wordDict: Set[str]
+        :rtype: bool
+        """
+        # dp[i] = true means that s[0, i -1] can be constructed by the words in wordDict.
+        # So, dp[0] must be ture.
+        n, dp = len(s), [True] + [False] * len(s)
+        for i in range(n):
+            for j in range(i + 1):
+                if dp[j] and s[j:i+1] in wordDict:
+                    dp[i + 1] = True
+                    break
+        return dp[n]

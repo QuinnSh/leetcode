@@ -1,0 +1,30 @@
+public boolean canFinish(int numCourses, int[][] prerequisites) {
+         if (null == prerequisites || numCourses == 0 || prerequisites.length == 0) {
+                return true;
+            }
+            int[] preCourses = new int[numCourses];
+            // store the in-degree #
+            for (int[] prerequisite : prerequisites) {
+                preCourses[prerequisite[0]]++;
+            }
+            Queue<Integer> queue = new LinkedList<Integer>();
+            for (int i = 0; i < preCourses.length; i++) {
+                if (preCourses[i] == 0) {
+                    queue.add(i);
+                }
+            }
+            int remaining = numCourses;
+            while (!queue.isEmpty()) {
+                int top = queue.poll();
+                remaining--;
+                for (int[] prerequisite : prerequisites) {
+                    if (prerequisite[1] == top) {//寻找每一个后序课程
+                        preCourses[prerequisite[0]]--;
+                        if (preCourses[prerequisite[0]] == 0) {
+                            queue.add(prerequisite[0]);
+                        }
+                    }
+                }
+            }
+            return remaining==0;
+        }

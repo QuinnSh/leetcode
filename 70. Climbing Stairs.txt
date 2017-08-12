@@ -1,0 +1,11 @@
+class Solution(object):
+    def climbStairs(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        sum = 0
+        for i in xrange(0, n/2 + 1):
+            count = n - i
+            sum += reduce(operator.mul, range(count - i + 1, count + 1), 1) / reduce(operator.mul, range(1, i +1), 1)
+        return sum

@@ -1,0 +1,56 @@
+public class Solution {
+    public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+        List<Integer> res = new ArrayList<>();
+        int minHeight = Integer.MAX_VALUE;        //当前最小的高度
+        HashMap<Integer,List<Integer>> neighbors = new HashMap<>();  //key为节点，list为该节点的邻接节点
+        for(int i=0;i<edges.length;i++){        //找出每个点的邻接节点，这样方便查找
+            if(neighbors.containsKey(edges[i][0])){
+                neighbors.get(edges[i][0]).add(edges[i][1]);
+            }else{
+                List<Integer>  list = new ArrayList<>();
+                list.add(edges[i][1]);
+                neighbors.put(edges[i][0],list);
+            }
+            if(neighbors.containsKey(edges[i][1])){
+                neighbors.get(edges[i][1]).add(edges[i][0]);
+            }else{
+                List<Integer>  list = new ArrayList<>();
+                list.add(edges[i][0]);
+                neighbors.put(edges[i][1],list);
+            }
+        }
+        for(int i=0;i<n;i++){       //对每个节点求其高度
+            int max = 0;        //以点i为跟节点时，树的最高高度
+            boolean[] visited = new boolean[n];     //记录该点是否被遍历过
+            Queue<Integer> queue = new LinkedList<>();
+            Queue<Integer> tempQueue = new LinkedList<>();      //用来记录下一层节点
+            queue.add(i);
+            max++;
+            while(!queue.isEmpty()||!tempQueue.isEmpty()){
+                if(!queue.isEmpty()){        //遍历一层
+                    int a = queue.poll();
+                    visited[a] = true;
+                    if(neighbors.get(a)!=null){
+                        for(int j=0;j<neighbors.get(a).size();j++){ //未被遍历过的邻节点添加进queue
+                            int neighbor = neighbors.get(a).get(j);
+                            if(!visited[neighbor]) tempQueue.add(neighbor);
+                        }
+                    }
+                }else{      //讲下一层数据添加当前层
+                    if(!tempQueue.isEmpty())  //下一层不为空，层数加一
+                        max++;
+                    queue = new LinkedList<>(tempQueue);
+                    tempQueue.clear();;
+                }
+            }
+            if(max<minHeight){
+                minHeight=max;
+                res.clear();
+                res.add(i);
+            }else if(max==minHeight){
+                res.add(i);
+            }
+        }
+        return res;
+    }
+}

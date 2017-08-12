@@ -1,0 +1,20 @@
+class Solution:
+   """:type heights: List[int]
+       :rtype: int
+       """
+   def largestRectangleArea(self, height):
+       maxArea=0
+       for i in range(len(height)):
+           min = height[i]
+           for j in range(i, len(height)):
+                if height[j] < min:
+                    min = height[j]
+                if min*(j-i+1) > maxArea:
+                    maxArea = min*(j-i+1)
+       return maxArea
+if __name__ == '__main__':
+    S= Solution()
+   heights = [2,1,5,6,2,3]
+   maxarea = S.largestRectangleArea(heights)
+   print(maxarea)
+ 

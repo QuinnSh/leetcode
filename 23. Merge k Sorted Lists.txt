@@ -1,0 +1,21 @@
+
+class Solution(object):
+    def mergeKLists(self, lists):
+        """
+        :type lists: List[ListNode]
+        :rtype: ListNode
+        """
+        heap = []
+        for l in lists:
+            if l != None:
+                heap.append((l.val,l))
+        heapq.heapify(heap)
+        dummy = ListNode(0)
+        cur = dummy
+        while heap:
+            _,h = heapq.heappop(heap)
+            cur.next = h
+            cur = cur.next
+            if h.next:
+                heapq.heappush(heap,(h.next.val,h.next))
+        return dummy.next

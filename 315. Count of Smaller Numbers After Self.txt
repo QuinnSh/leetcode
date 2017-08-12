@@ -1,0 +1,21 @@
+def countSmaller(self, nums):
+    def sort(enum):
+        half = len(enum) / 2
+        if half:
+            left, right = sort(enum[:half]), sort(enum[half:])
+            m, n = len(left), len(right)
+            i = j = 0
+            while i < m or j < n:
+                if j == n or i < m and left[i][1] <= right[j][1]:
+                #这里简化了merge sort,去掉了当i先到m或者j先到n的情况，直接合并到这一个while里面了。
+                #j == n意思就是说j到头了，i还有元素没有合并。说明剩下的元素比right部分所有的数都大，所以也要算上len(right)的逆序数。例如left = [5,6,7], right = [1,2,3]. 
+                    enum[i+j] = left[i]
+                    smaller[left[i][0]] += j#这里直接加j就行了，好好体会。比方说left = [5,6,7], right = [1,2,10].这里当j指向10的时候，就可以开始即逆序数了，i指向的5被串入结果数组，i++指向6，那么6至少也有现在j这么多得逆序数
+                    i += 1
+                else:
+                    enum[i+j] = right[j]
+                    j += 1
+        return enum
+    smaller = [0] * len(nums)
+    sort(list(enumerate(nums)))
+    return smaller

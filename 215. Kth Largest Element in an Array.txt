@@ -1,0 +1,49 @@
+class Solution(object):
+
+    def findKthLargest(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
+        #first build heap
+        n=len(nums)
+        i=(n-1)/2
+        while i>=0:
+            self.buildHeap(nums,i)
+            i-=1    
+        i=1   
+        while i<k:
+            # first element swaps to last element   
+            nums[0]=nums[n-i] #override max element
+            nums=nums[0:n-i] 
+            self.buildHeap(nums,0) 
+            i+=1                    
+        return nums[0]
+
+    def buildHeap(self,nums,i):
+        init=i
+        leftIndex=self.getLeft(nums,i)
+        rightIndex=self.getRight(nums,i)
+        if leftIndex!=-1 and nums[i]<nums[leftIndex]:                
+            i=leftIndex
+        if rightIndex!=-1 and nums[i]<nums[rightIndex]:
+            i=rightIndex        
+        if i!=init:#check if i changes
+            tmp=nums[init]#swap
+            nums[init]=nums[i]
+            nums[i]=tmp
+            self.buildHeap(nums,i)
+
+    # get left index for i index
+    def getLeft(self,nums,i):
+        """return left element for i
+        if no exists, return -1
+        """
+        return -1 if 2*i+1>=len(nums) else 2*i+1
+        # get right index for i index
+    def getRight(self,nums,i):
+        """return right element for i
+        if no exists, return -1
+        """
+        return -1 if 2*i+2>=len(nums) else 2*i+2
